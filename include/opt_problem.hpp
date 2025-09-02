@@ -4,6 +4,8 @@
 #include <Eigen/Dense>
 #include <iostream>
 
+#include "osqp++.h"
+
 using VectorXd = Eigen::VectorXd;
 using MatrixXd = Eigen::MatrixXd;
 
@@ -47,8 +49,9 @@ public:
 class SqpProblem : public OptProblem
 {
 protected:
-    SqpProblem(int max_iter_, double conv_tol_, int num_dec_vars_, int num_eq_cons_, int num_ineq_cons_);
-    
+    SqpProblem(int max_iter_, double conv_tol_, int num_dec_vars_, 
+        int num_eq_cons_, int num_ineq_cons_, double bfgs_eps_, bool use_bfgs_apprx_);
+
     // The size on all the VectorXd's and MatrixXd's needs to be set in the constructor of the derived class.
     VectorXd grad_lagrangian;
     VectorXd grad_lagrangian_prev;
@@ -65,17 +68,23 @@ protected:
     const int num_dec_vars;
     const int num_eq_cons;
     const int num_ineq_cons;
-
+    const double bfgs_eps;
+    const bool use_bfgs_apprx;
 
 public:
     virtual ~SqpProblem() = 0;
     
     virtual void gradLagrangian() = 0;
 
+    // Calculates hessian_lagrangian and inv_hessian_lagrangian matrices
+    virtual void hessianLagrangian();
+
+    // Calculates hessian_lagrangian and inv_hessian_lagrangian matrices using BFGS approximation.
+    //
     // Sources on BFGS Hessian apprx: 
     // https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm
     // https://towardsdatascience.com/bfgs-in-a-nutshell-an-introduction-to-quasi-newton-methods-21b0e13ee504/
-    virtual void hessianLagrangian();
+    void bfgsHessianApprx();
 
     virtual void solve() override;
 

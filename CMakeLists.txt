@@ -7,6 +7,14 @@ set(CMAKE_BUILD_TYPE Debug)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
+include(FetchContent)
+FetchContent_Declare(
+    osqp-cpp
+    GIT_REPOSITORY https://github.com/google/osqp-cpp.git
+    GIT_TAG 43433736334d6b515ea4b0247156fea9e56c0d3f
+)
+FetchContent_MakeAvailable(osqp-cpp)
+
 set(OPTIMIZATION_CPP_SRCS "")
 file(GLOB_RECURSE OPTIMIZATION_CPP_SRCS
     CONFIGURE_DEPENDS
@@ -18,8 +26,9 @@ add_library(optimization_cpp ${OPTIMIZATION_CPP_SRCS})
 target_include_directories(optimization_cpp
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${osqp-cpp_SOURCE_DIR}/include
 )
-target_link_libraries(optimization_cpp Eigen3::Eigen)
+target_link_libraries(optimization_cpp Eigen3::Eigen osqp-cpp)
 
 
 add_executable(main main.cpp)
