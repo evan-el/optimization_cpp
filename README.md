@@ -1,1 +1,1 @@
-# qp_cpp
+# optimization_cpp
