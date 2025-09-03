@@ -3,7 +3,7 @@ project(optimization_cpp CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
@@ -31,5 +31,5 @@ target_include_directories(optimization_cpp
 target_link_libraries(optimization_cpp Eigen3::Eigen osqp-cpp)
 
 
-add_executable(main main.cpp)
-target_link_libraries(main optimization_cpp)
+add_executable(run_examples src/run_examples.cpp)
+target_link_libraries(run_examples optimization_cpp)

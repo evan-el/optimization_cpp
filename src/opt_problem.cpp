@@ -49,6 +49,8 @@ SqpProblem::SqpProblem(int max_iter_, double conv_tol_, int num_dec_vars_,
 
     osqp_instance.upper_bounds.resize(num_eq_cons+num_ineq_cons,1);
     osqp_instance.lower_bounds.resize(num_eq_cons+num_ineq_cons,1);
+    
+    osqp_settings.verbose = false;
 }
 
 SqpProblem::~SqpProblem() {}
@@ -68,9 +70,9 @@ void SqpProblem::bfgsHessianApprx()
 
     inv_hessian_objective = (identity-rho*step*delta_grad.transpose())*inv_hessian_objective*(identity-rho*delta_grad*step.transpose()) + rho*step*step.transpose();
 
-    std::cout << "grad: " << grad_objective << std::endl;
-    std::cout << "delta_grad: " << delta_grad << std::endl;
-    std::cout << "step: " << step << std::endl;
+    // std::cout << "grad: " << grad_objective << std::endl;
+    // std::cout << "delta_grad: " << delta_grad << std::endl;
+    // std::cout << "step: " << step << std::endl;
 }
 
 void SqpProblem::solve()
@@ -93,8 +95,8 @@ void SqpProblem::solve()
     int k = 0;
     while (!isConverged() && k<max_iter)
     {
-        std::cout << "using bfgs: " << use_bfgs_apprx << std::endl;
-        std::cout << hessian_objective << std::endl;
+        // std::cout << "using bfgs: " << use_bfgs_apprx << std::endl;
+        // std::cout << hessian_objective << std::endl;
         osqp_instance.objective_matrix = hessian_objective.sparseView();
         osqp_instance.objective_vector = grad_objective.sparseView();
 
@@ -109,7 +111,7 @@ void SqpProblem::solve()
         osqp_instance.upper_bounds.segment(num_eq_cons, num_ineq_cons) = -ineq_cons_val;
 
         auto osqp_solver_status = osqp_solver.Init(osqp_instance, osqp_settings);
-        std::cout << osqp_solver_status << std::endl;
+        // std::cout << osqp_solver_status << std::endl;
         osqp::OsqpExitCode exit_code = osqp_solver.Solve();
         step = osqp_solver.primal_solution();
         VectorXd mult = osqp_solver.dual_solution();
@@ -141,13 +143,13 @@ void SqpProblem::solve()
         
         hessianObjective();
         k++;
-        std::cout << "iterations: " << k << std::endl;
     }
+    // std::cout << "iterations: " << k << std::endl;
 }
 
 bool SqpProblem::isConverged()
 {
     // TODO: Could check the norm of the gradient of lagrangian instead of step. This could reduce extra iterations.
-    std::cout << "step norm: " << step.norm() << std::endl;
+    // std::cout << "step norm: " << step.norm() << std::endl;
     return (step.norm()<conv_tol && eq_cons_val.norm()<conv_tol && (ineq_cons_val.array()<conv_tol).all());
 }

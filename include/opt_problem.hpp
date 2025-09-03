@@ -52,7 +52,6 @@ protected:
     SqpProblem(int max_iter_, double conv_tol_, int num_dec_vars_, 
         int num_eq_cons_, int num_ineq_cons_, double bfgs_eps_, bool use_bfgs_apprx_);
 
-    // The size on all the VectorXd's and MatrixXd's needs to be set in the constructor of the derived class.
     VectorXd grad_objective;
     VectorXd grad_objective_prev;
 
