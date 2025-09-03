@@ -6,7 +6,7 @@
 // TODO: implement a QP solver to solve each quadratic subproblem step
 int main()
 {
-    const int max_iter = 10000;
+    const int max_iter = 1000;
     const double convergence_tol = 1.0e-3;
 
     VectorXd dec_var_guess(3,1);

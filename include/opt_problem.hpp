@@ -53,11 +53,14 @@ protected:
         int num_eq_cons_, int num_ineq_cons_, double bfgs_eps_, bool use_bfgs_apprx_);
 
     // The size on all the VectorXd's and MatrixXd's needs to be set in the constructor of the derived class.
-    VectorXd grad_lagrangian;
-    VectorXd grad_lagrangian_prev;
+    VectorXd grad_objective;
+    VectorXd grad_objective_prev;
 
-    MatrixXd hessian_lagrangian;
-    MatrixXd inv_hessian_lagrangian;
+    MatrixXd hessian_objective;
+    MatrixXd inv_hessian_objective;
+
+    MatrixXd grad_eq_cons;
+    MatrixXd grad_ineq_cons;
 
     VectorXd step;
 
@@ -71,13 +74,21 @@ protected:
     const double bfgs_eps;
     const bool use_bfgs_apprx;
 
+    osqp::OsqpInstance osqp_instance;
+    osqp::OsqpSettings osqp_settings;
+    osqp::OsqpSolver osqp_solver;
+
 public:
     virtual ~SqpProblem() = 0;
     
-    virtual void gradLagrangian() = 0;
+    virtual void gradObjective() = 0;
 
     // Calculates hessian_lagrangian and inv_hessian_lagrangian matrices
-    virtual void hessianLagrangian();
+    virtual void hessianObjective();
+
+    virtual void gradEqCons() = 0;
+
+    virtual void gradIneqCons() = 0;
 
     // Calculates hessian_lagrangian and inv_hessian_lagrangian matrices using BFGS approximation.
     //

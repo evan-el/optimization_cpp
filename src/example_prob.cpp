@@ -4,26 +4,40 @@
 
 double MySqpProblem::objective()
 {
-    return w1*dec_var(0)*dec_var(0) + w2*dec_var(1)*dec_var(1) + w3*dec_var(2)*dec_var(2);
+    return w1*exp(-dec_var(0)) + w2*dec_var(1)*dec_var(1) + w3*dec_var(2)*dec_var(2);
 }
 
 void MySqpProblem::eqCons()
 {
-    eq_cons_val(0) = 5.0*dec_var(0) - 1;
+    eq_cons_val(0) = 5.0*dec_var(2) - 1.0;
 }
 
 void MySqpProblem::ineqCons()
 {
-
+    ineq_cons_val(0) = dec_var(0) + dec_var(2) - 3.0;
 }
 
-void MySqpProblem::gradLagrangian()
+void MySqpProblem::gradObjective()
 {
-    // w.r.t. decision vars
-    grad_lagrangian(0) = 2.0*w1*dec_var(0) + eq_cons_mult(0)*5.0;
-    grad_lagrangian(1) = 2.0*w2*dec_var(1);
-    grad_lagrangian(2) = 2.0*w3*dec_var(2);
+    grad_objective(0) = -dec_var(0)*w1*exp(-dec_var(0));
+    grad_objective(1) = 2.0*w2*dec_var(1);
+    grad_objective(2) = 2.0*w3*dec_var(2);
+}
 
-    // w.r.t. equality constraint multipliers
-    grad_lagrangian(3) = eq_cons_val(0);
+void MySqpProblem::hessianObjective()
+{
+    hessian_objective(0,0) = dec_var(0)*dec_var(0)*w1*exp(-dec_var(0));
+    hessian_objective(1,1) = 2.0*w2;
+    hessian_objective(2,2) = 2.0*w3;
+}
+
+void MySqpProblem::gradEqCons()
+{
+    grad_eq_cons(0,2) = 5.0;
+}
+
+void MySqpProblem::gradIneqCons()
+{
+    grad_ineq_cons(0,0) = 1.0;
+    grad_ineq_cons(0,2) = 1.0;
 }

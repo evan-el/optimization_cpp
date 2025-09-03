@@ -17,18 +17,23 @@ public:
 
     void ineqCons() override;
 
-    void gradLagrangian() override;
+    void gradObjective() override;
 
     // must overload hessianLagrangian if you don't want to use bfgs apprx
+    void hessianObjective() override;
+
+    void gradEqCons() override;
+
+    void gradIneqCons() override;
 
 private:
     static constexpr int num_dec_vars_ = 3;
     static constexpr int num_eq_cons_ = 1;
-    static constexpr int num_ineq_cons_ = 0;
+    static constexpr int num_ineq_cons_ = 1;
     static constexpr double bfgs_eps_ = 1.0e-20;
-    static constexpr bool use_bfgs_apprx_ = true;
+    static constexpr bool use_bfgs_apprx_ = false;
 
-    double w1 = 10.0;
-    double w2 = 20.0;
-    double w3 = 10.0;
+    double w1 = 20.0;
+    double w2 = 1.0;
+    double w3 = 1.0;
 };
