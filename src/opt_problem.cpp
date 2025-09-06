@@ -93,8 +93,7 @@ void SqpProblem::solve()
     }
 
     int k = 0;
-    while (!isConverged() && k<max_iter)
-    {
+    do {
         // std::cout << "using bfgs: " << use_bfgs_apprx << std::endl;
         // std::cout << hessian_objective << std::endl;
         osqp_instance.objective_matrix = hessian_objective.sparseView();
@@ -143,7 +142,7 @@ void SqpProblem::solve()
         
         hessianObjective();
         k++;
-    }
+    }   while (!isConverged() && k<max_iter);
     // std::cout << "iterations: " << k << std::endl;
 }
 
