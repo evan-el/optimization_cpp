@@ -53,6 +53,23 @@ SqpProblem::SqpProblem(int max_iter_, double conv_tol_, int num_dec_vars_,
     osqp_settings.verbose = false;
 }
 
+void SqpProblem::reset()
+{
+    grad_objective.setZero();
+    grad_objective_prev.setZero();
+    hessian_objective.setZero();
+    inv_hessian_objective.setZero();
+    grad_eq_cons.setZero();
+    grad_ineq_cons.setZero();
+    step.setZero();
+
+    dec_var.setZero();
+    eq_cons_val.setZero();
+    ineq_cons_val.setZero();
+    eq_cons_mult.setZero();
+    ineq_cons_mult.setZero();
+}
+
 SqpProblem::~SqpProblem() {}
 
 void SqpProblem::hessianObjective()

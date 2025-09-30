@@ -80,6 +80,8 @@ protected:
 public:
     virtual ~SqpProblem() = 0;
     
+    void reset();
+
     virtual void gradObjective() = 0;
 
     // Calculates hessian_lagrangian and inv_hessian_lagrangian matrices
