@@ -15,7 +15,7 @@ void runOptimalControlExample()
 
     prob.setDecVar(dec_var_guess);
     auto start = std::chrono::high_resolution_clock::now();
-    prob.solve();
+    bool solve_success = prob.solve();
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
     std::cout << "Elapsed time: " << duration.count()*1e-6 << " seconds" << std::endl;
@@ -35,7 +35,7 @@ void runSqpExample()
 
     ex_prob.setDecVar(example_dec_var_guess);
     auto ex_start = std::chrono::high_resolution_clock::now();
-    ex_prob.solve();
+    bool solve_success = ex_prob.solve();
     auto ex_end = std::chrono::high_resolution_clock::now();
     auto ex_duration = std::chrono::duration_cast<std::chrono::microseconds>(ex_end - ex_start);
     std::cout << "Elapsed time: " << ex_duration.count()*1e-6 << " seconds" << std::endl;

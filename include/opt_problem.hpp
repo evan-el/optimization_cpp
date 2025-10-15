@@ -43,7 +43,7 @@ public:
     // eq_cons_mult and ineq_cons_mult are the lagrange multipliers
     virtual double lagrangian();
 
-    virtual void solve() = 0;
+    virtual bool solve() = 0;
 
 };
 class SqpProblem : public OptProblem
@@ -98,7 +98,7 @@ public:
     // https://towardsdatascience.com/bfgs-in-a-nutshell-an-introduction-to-quasi-newton-methods-21b0e13ee504/
     void bfgsHessianApprx();
 
-    virtual void solve() override;
+    virtual bool solve() override;
 
     virtual bool isConverged();
 

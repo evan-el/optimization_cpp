@@ -92,7 +92,7 @@ void SqpProblem::bfgsHessianApprx()
     // std::cout << "step: " << step << std::endl;
 }
 
-void SqpProblem::solve()
+bool SqpProblem::solve()
 {
     eqCons();
     ineqCons();
@@ -129,6 +129,11 @@ void SqpProblem::solve()
         auto osqp_solver_status = osqp_solver.Init(osqp_instance, osqp_settings);
         // std::cout << osqp_solver_status << std::endl;
         osqp::OsqpExitCode exit_code = osqp_solver.Solve();
+        if (exit_code!=osqp::OsqpExitCode::kOptimal)
+        {
+            return false;
+        }
+
         step = osqp_solver.primal_solution();
         VectorXd mult = osqp_solver.dual_solution();
         
@@ -160,6 +165,7 @@ void SqpProblem::solve()
         hessianObjective();
         k++;
     }   while (!isConverged() && k<max_iter);
+    return true;
     // std::cout << "iterations: " << k << std::endl;
 }
 
