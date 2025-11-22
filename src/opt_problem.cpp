@@ -63,7 +63,7 @@ void SqpProblem::reset()
     grad_ineq_cons.setZero();
     step.setZero();
 
-    dec_var.setZero();
+    // dec_var.setZero();
     eq_cons_val.setZero();
     ineq_cons_val.setZero();
     eq_cons_mult.setZero();
